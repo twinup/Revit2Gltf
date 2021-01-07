@@ -1,5 +1,5 @@
 # Revit2Gltf
-Open source converter and plugin for Revit files to gLTF
+Open source converter and plugin for Revit files to gLTF. Created by [Cityzenith](www.cityzenith.com) for seeding digital twins.
 
 ![Simple Export](Images/2.JPG)
 
