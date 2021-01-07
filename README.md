@@ -8,10 +8,14 @@ gLTF is a portable 3d object schema produced by Khronos Group which combines hig
 Its accepted by many softwares and can be used in JS 3d viewers such as Three and Babylon.
 
 gLTFs consist of two key parts:
-myfile.gltf    <- Contains the model's heirarchy and metadata in JSON.
-myfile.bin     <- A binary of the model's geometry ("buffer"), intended to be efficiently compressed for portability and performance. This is explicitly referred to in the .gltf file, so don't change the name of this file without changing the reference in the .gltf file!
 
-everythingelse <- Your textures and linked files specified within the .gltf
+- myfile.gltf    <- Contains the model's heirarchy and metadata in JSON.
+
+- myfile.bin     <- A binary of the model's geometry ("buffer"), intended to be efficiently compressed for portability and performance. This is explicitly referred to in the .gltf file, so don't change the name of this file without changing the reference in the .gltf file!
+
+and...
+
+- everythingelse <- Your textures and linked files specified within the .gltf
 
 You can add further compression with processes such as [DRACO](https://google.github.io/draco/)
 
