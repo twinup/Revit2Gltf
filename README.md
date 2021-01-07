@@ -1,7 +1,7 @@
 # Revit2Gltf
 Open source converter and plugin for Revit files to gLTF
 
-[Simple Export](Images/2.JPG)
+![Simple Export](Images/2.JPG)
 
 ## Why gLTF?
 gLTF is a portable 3d object schema produced by Khronos Group which combines high performance, portability and human-readability.
