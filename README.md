@@ -35,5 +35,6 @@ You can add further compression with processes such as [DRACO](https://google.gi
 
 ## Caveats
 - Tested only in Revit 2016 (Licenses are expensive!) but should work 99% perfectly on other platforms. Compiler conditionals are set up for breaking API changes such as in Revit 2020
+- Not all colors and textures are exported correctly. If you take a close look inside the sausage you'll see why - a lot of digging around with magic strings to get at these resources. Although we will gradually improve this, guidance welcomed here
 
-Maintained by Leland Jobson (gh: lelandjobson)
+#### Maintained by Leland Jobson (gh: lelandjobson)
