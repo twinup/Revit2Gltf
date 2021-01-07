@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage SchemaVersion="1.0" AppVersion="0.0.1" ProductCode="a662bc6a-1b1b-487a-b02c-0f442eafb58f">
+  <CompanyDetails Name="Cityzenith" Email="" Url="www.cityzenith.com" Phone="" />
+  <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2016" SeriesMax="R2020" />
+  <Components Description="2016">
+    <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2016" SeriesMax="R2016" />
+    <ComponentEntry AppName="Revit2Gltf.Plugin" Version="0.0.1" ModuleName="./Contents/x64/R2016/Revit2Gltf.addin" AppDescription="Revit to Gltf Converter"></ComponentEntry>
+  </Components>
+  <Components Description="2017">
+    <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2017" SeriesMax="R2017" />
+    <ComponentEntry AppName="Revit2Gltf.Plugin" Version="0.0.1" ModuleName="./Contents/x64/R2017/Revit2Gltf.addin" AppDescription="Revit to Gltf Converter"></ComponentEntry>
+  </Components>
+  <Components Description="2018">
+    <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2018" SeriesMax="R2018" />
+    <ComponentEntry AppName="Revit2Gltf.Plugin" Version="0.0.1" ModuleName="./Contents/x64/R2018/Revit2Gltf.addin" AppDescription="Revit to Gltf Converter"></ComponentEntry>
+  </Components>
+  <Components Description="2019">
+    <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2019" SeriesMax="R2019" />
+    <ComponentEntry AppName="Revit2Gltf.Plugin" Version="0.0.1" ModuleName="./Contents/x64/R2019/Revit2Gltf.addin" AppDescription="Revit to Gltf Converter"></ComponentEntry>
+  </Components>
+  <Components Description="2020">
+    <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2020" SeriesMax="R2020" />
+    <ComponentEntry AppName="Revit2Gltf.Plugin" Version="0.0.1" ModuleName="./Contents/x64/R2020/Revit2Gltf.addin" AppDescription="Revit to Gltf Converter"></ComponentEntry>
+  </Components>
+</ApplicationPackage>

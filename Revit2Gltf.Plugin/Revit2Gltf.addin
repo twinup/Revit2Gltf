@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Revit2Gltf</Name>
+    <Assembly>.\Revit2Gltf.Plugin.dll</Assembly>
+    <AddInId>22d6f9f5-f3db-4adc-bf44-13a0db48c9d2</AddInId>
+    <FullClassName>Revit2Gltf.Plugin.AddinApplication</FullClassName>
+    <ClientId>1e26ac03-d9a8-4136-82d9-2ebd8edda8be</ClientId>
+    <VendorId>Cityzenith, Leland Jobson</VendorId>
+    <VendorDescription>www.cityzenith.com </VendorDescription>
+  </AddIn>
+</RevitAddIns>

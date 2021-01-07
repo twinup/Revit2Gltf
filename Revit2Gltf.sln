@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revit2Gltf", "Revit2Gltf\Revit2Gltf.csproj", "{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Revit2Gltf.Plugin", "Revit2Gltf.Plugin\Revit2Gltf.Plugin.csproj", "{E10817AC-CB7F-4C86-921F-19D047426A3B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug2016|Any CPU = Debug2016|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Release2016|Any CPU = Release2016|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Debug2016|Any CPU.ActiveCfg = Debug2016|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Debug2016|Any CPU.Build.0 = Debug2016|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Release2016|Any CPU.ActiveCfg = Release2016|Any CPU
+		{AD5AE38A-3BDE-4FB0-88F6-1F4133566AB5}.Release2016|Any CPU.Build.0 = Release2016|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Debug2016|Any CPU.ActiveCfg = Debug2016|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Debug2016|Any CPU.Build.0 = Debug2016|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Release2016|Any CPU.ActiveCfg = Release2016|Any CPU
+		{E10817AC-CB7F-4C86-921F-19D047426A3B}.Release2016|Any CPU.Build.0 = Release2016|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA549948-D401-4848-872E-9F9C7CACBF4C}
+	EndGlobalSection
+EndGlobal
