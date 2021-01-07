@@ -10,9 +10,6 @@ using System.Windows.Media.Imaging;
 
 namespace Revit2Gltf.Plugin
 {
-    /// <summary>
-    /// 
-    /// </summary>
     internal class PluginController
     {
         private const string RibbonTabName = "Cityzenith";
