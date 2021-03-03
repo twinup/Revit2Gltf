@@ -214,16 +214,16 @@ namespace Revit2Gltf
                     utilized = true;
                 }
             }
-            //if (utilized)
-            //{
-            //    Logger.LogInfo($"Adding material {mat.Name} to gltf.");
-            //    model.Materials.Add(mat);
-            //}
-            //else
-            //{
-            //    Logger.LogInfo($"Won't add material {mat.Name} to gltf " +
-            //        $"because no objects utilize it.");
-            //}
+            if (utilized)
+            {
+                //Logger.LogInfo($"Adding material {mat.Name} to gltf.");
+                model.Materials.Add(mat);
+            }
+            else
+            {
+                //Logger.LogInfo($"Won't add material {mat.Name} to gltf " +
+                //    $"because no objects utilize it.");
+            }
         }
 
         public static void ReplaceNamesWithUniqueIds(Scene model, Dictionary<string, string> localToUniqueIdMap)
