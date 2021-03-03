@@ -30,8 +30,6 @@ namespace Revit2Gltf.Plugin.Commands
             if (!TryGetActiveDocument(commandData, out Autodesk.Revit.DB.Document docToExport)) { return Result.Failed; }
             if (!TryGetDefaultView(docToExport, out View viewToExport)) { return Result.Failed; }
 
-            // Prompt for export folder
-
 
             // Grab doc name
             string docName = Path.GetFileNameWithoutExtension(docToExport.Title);
@@ -43,7 +41,8 @@ namespace Revit2Gltf.Plugin.Commands
             // Grab configuration
             var configuration = ConfigurationManager.ActiveConfiguration;
 
-            // Check the folder exists to export to
+            // Create a new folder for the export
+            configuration.ExportFilePathRoot = $"C:/Cityzenith/{docName}";
             if (!Directory.Exists(configuration.ExportFilePathRoot))
             {
                 Directory.CreateDirectory(configuration.ExportFilePathRoot);
@@ -61,6 +60,8 @@ namespace Revit2Gltf.Plugin.Commands
                     WithoutBoundaryEdges = true
                 }
              );
+
+
 
             // Check that file was created successfully
             var fbxFileName = configuration.ExportFilePathRoot + "/" + docName + ".fbx";
