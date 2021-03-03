@@ -1,4 +1,8 @@
-﻿using Autodesk.Revit.Utility;
+﻿#if REVIT2019
+using Autodesk.Revit.DB.Visual;
+#else
+using Autodesk.Revit.Utility;
+#endif
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -52,6 +52,16 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug2019|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug2019\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;REVIT2019</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AssimpNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
       <HintPath>..\packages\AssimpNet.4.1.0\lib\net40\AssimpNet.dll</HintPath>
@@ -173,8 +183,8 @@ if $(Configuration) == Debug2016 goto Debug2016
 if $(Configuration) == Release2016 goto Release2016
 if $(Configuration) == Debug2017 goto Debug2017
 if $(Configuration) == Release2017 goto Release2017
-if $(Configuration) == Debug2020 goto Debug2020
-if $(Configuration) == Release2020 goto Release2020
+if $(Configuration) == Debug2019 goto Debug2019
+if $(Configuration) == Release2019 goto Release2019
 
 
 :Debug2016
@@ -209,20 +219,20 @@ xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Auto
 xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2017\" /i /y /c
 goto exit
 
-:Debug2020
-echo Copying results to 2020
+:Debug2019
+echo Copying results to 2019
 
-xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /y /c /i
+xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /y /c /i
 xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\" /i /y /c
-xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /i /y /c
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /i /y /c
 goto exit
 
-:Release2020
-echo Copying results to 2020
+:Release2019
+echo Copying results to 2019
 
-xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /y /c /i
+xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /y /c /i
 xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\" /i /y /c
-xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /i /y /c
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /i /y /c
 goto exit
 
 :exit</PostBuildEvent>

@@ -1,7 +1,9 @@
 ﻿using Assimp;
 using Assimp.Configs;
 using Autodesk.Revit.DB;
+#if REVIT2017 || REVIT2016 || REVIT2015
 using Autodesk.Revit.Utility;
+#endif
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,12 +11,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Material = Assimp.Material;
 using RevitMaterial = Autodesk.Revit.DB.Material;
+
+#if REVIT2018 || REVIT2019 || REVIT2020
+using Autodesk.Revit.DB.Visual;
+using Revit2Gltf;
+#endif
 
 namespace Revit2Gltf
 {
     public static class AssimpUtilities
     {
+        public const string UnknownObjectName = "Unknown Revit Object";
+
+
         public static float GetOpacity(this RevitMaterial mat)
         {
             return (Math.Abs(mat.Transparency - 100) * 1f / 100f);
@@ -24,6 +35,41 @@ namespace Revit2Gltf
         {
             var color = mat.Color;
             return new Color4D(color.Red * 1f / 255f, color.Green * 1f / 255f, color.Blue * 1f / 255f, mat.GetOpacity());
+        }
+
+        public static Color4D ColorFromAssetDoubleArray4d(AssetPropertyDoubleArray4d prop)
+        {
+#if REVIT2019 || REVIT2020
+            var colorValues = prop.GetValueAsDoubles()?.ToList() ?? new List<double>();
+            if (colorValues != null && colorValues.Count > 3)
+            {
+                return new Color4D(
+                    (float)colorValues[0],
+                    (float)colorValues[1],
+                    (float)colorValues[2],
+                    (float)colorValues[3]);
+            }
+            else
+            {
+                // Default return if invalid
+                return new Color4D(200);
+            }
+#else
+                return new Color4D(
+                        (float)prop.Value.get_Item(0),
+                        (float)prop.Value.get_Item(1),
+                        (float)prop.Value.get_Item(2),
+                        (float)prop.Value.get_Item(3));
+#endif
+        }
+
+        public static T GetAssetProperty<T>(this Asset a, string key) where T : AssetProperty
+        {
+#if REVIT2019 || REVIT2020
+            return a.FindByName(key) as T;
+#else
+            return a[key] as T;
+#endif
         }
 
         public static Assimp.Material ConvertToAssimpMaterial(TextureBundle bundle, Document doc)
@@ -77,20 +123,15 @@ namespace Revit2Gltf
                     #endregion
 
                     case "generic_diffuse":
-                        var prop = renderingAsset["generic_diffuse"] as AssetPropertyDoubleArray4d;
-                        newmat.ColorDiffuse = new Color4D(
-                            (float)prop.Value.get_Item(0),
-                            (float)prop.Value.get_Item(1),
-                            (float)prop.Value.get_Item(2),
-                            (float)prop.Value.get_Item(3)
-                        );
+                        var prop = renderingAsset.GetAssetProperty<AssetPropertyDoubleArray4d>("generic_diffuse");
+                        newmat.ColorDiffuse = ColorFromAssetDoubleArray4d(prop);
                         break;
                     case "glazing_reflectance":
                         // This is glass, so we should reduce the transparency.
-                        var refl = renderingAsset["glazing_reflectance"] as AssetPropertyDouble;
+                        var refl = renderingAsset.GetAssetProperty<AssetPropertyDouble>("glazing_reflectance");
                         if (refl == null)
                         {
-                            var reflFloat = renderingAsset["glazing_reflectance"] as AssetPropertyFloat;
+                            var reflFloat = renderingAsset.GetAssetProperty<AssetPropertyFloat>("glazing_reflectance");
                             newmat.Reflectivity = reflFloat?.Value ?? 0f;
                         }
                         else
@@ -101,14 +142,11 @@ namespace Revit2Gltf
                         break;
                     case "common_Tint_color":
                         // Tint shouldn't be used if generic diffuse is set
-                        if (renderingAsset["generic_diffuse"] != null) { continue; }
-                        var tintProp = renderingAsset["common_Tint_color"] as AssetPropertyDoubleArray4d;
-                        newmat.ColorDiffuse = new Color4D(
-                            (float)tintProp.Value.get_Item(0),
-                            (float)tintProp.Value.get_Item(1),
-                            (float)tintProp.Value.get_Item(2),
-                            (float)tintProp.Value.get_Item(3)
-                        );
+                        if (
+                            renderingAsset.GetAssetProperty<AssetPropertyDoubleArray4d>("generic_diffuse") != null
+                            ) { continue; }
+                        var tintProp = renderingAsset.GetAssetProperty<AssetPropertyDoubleArray4d>("common_Tint_color");
+                        newmat.ColorDiffuse = ColorFromAssetDoubleArray4d(tintProp);
                         break;
                     default:
                         break;
@@ -176,16 +214,16 @@ namespace Revit2Gltf
                     utilized = true;
                 }
             }
-            if (utilized)
-            {
-                //Logger.LogInfo($"Adding material {mat.Name} to gltf.");
-                model.Materials.Add(mat);
-            }
-            else
-            {
-                //Logger.LogInfo($"Won't add material {mat.Name} to gltf " +
-                //    $"because no objects utilize it.");
-            }
+            //if (utilized)
+            //{
+            //    Logger.LogInfo($"Adding material {mat.Name} to gltf.");
+            //    model.Materials.Add(mat);
+            //}
+            //else
+            //{
+            //    Logger.LogInfo($"Won't add material {mat.Name} to gltf " +
+            //        $"because no objects utilize it.");
+            //}
         }
 
         public static void ReplaceNamesWithUniqueIds(Scene model, Dictionary<string, string> localToUniqueIdMap)
@@ -210,7 +248,7 @@ namespace Revit2Gltf
                         localToUniqueIdMap[fragments[1]] :
                         fragments[1]
                         :
-                    fragments.FirstOrDefault() ?? ConfigurationManager.ActiveConfiguration.UnknownObjectName;
+                    fragments.FirstOrDefault() ?? UnknownObjectName;
 
                 return result;
             }
@@ -273,6 +311,7 @@ namespace Revit2Gltf
                 }
                 catch (Exception e)
                 {
+                    //Logger.LogException("TryRemoveFile failed: ", e);
                     tries--;
                 }
             }

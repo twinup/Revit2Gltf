@@ -30,6 +30,9 @@ namespace Revit2Gltf.Plugin.Commands
             if (!TryGetActiveDocument(commandData, out Autodesk.Revit.DB.Document docToExport)) { return Result.Failed; }
             if (!TryGetDefaultView(docToExport, out View viewToExport)) { return Result.Failed; }
 
+            // Prompt for export folder
+
+
             // Grab doc name
             string docName = Path.GetFileNameWithoutExtension(docToExport.Title);
 

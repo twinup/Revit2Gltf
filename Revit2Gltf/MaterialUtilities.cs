@@ -1,6 +1,10 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+#if REVIT2019
+using Autodesk.Revit.DB.Visual;
+#else
 using Autodesk.Revit.Utility;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO;

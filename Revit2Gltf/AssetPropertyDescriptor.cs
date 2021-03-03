@@ -1,11 +1,17 @@
 ﻿using Autodesk.Revit.DB;
+#if REVIT2019
+using Autodesk.Revit.DB.Visual;
+#else
 using Autodesk.Revit.Utility;
+#endif
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
 
 namespace Revit2Gltf
 {
@@ -139,154 +145,154 @@ namespace Revit2Gltf
             return false;
         }
 
-        /// <summary>
-        /// Gets the current value of the property on a component.
-        /// </summary>
-        /// <param name="component">The component with the property for which to retrieve the value.</param>
-        /// <returns>The value of a property for a given component.</returns>
-        public override object GetValue(object component)
-        {
-            Tuple<Type, Object> typeAndValue = GetTypeAndValue(m_assetProperty, 0);
-            m_value = typeAndValue.Item2;
-            m_valueType = typeAndValue.Item1;
+        ///// <summary>
+        ///// Gets the current value of the property on a component.
+        ///// </summary>
+        ///// <param name="component">The component with the property for which to retrieve the value.</param>
+        ///// <returns>The value of a property for a given component.</returns>
+        //public override object GetValue(object component)
+        //{
+        //    Tuple<Type, Object> typeAndValue = GetTypeAndValue(m_assetProperty, 0);
+        //    m_value = typeAndValue.Item2;
+        //    m_valueType = typeAndValue.Item1;
 
-            return m_value;
-        }
+        //    return m_value;
+        //}
 
-        private static Tuple<Type, Object> GetTypeAndValue(AssetProperty assetProperty, int level)
-        {
-            Object theValue;
-            Type valueType;
-            //For each AssetProperty, it has different type and value
-            //must deal with it separately
-            try
-            {
-                if (assetProperty is AssetPropertyBoolean)
-                {
-                    AssetPropertyBoolean property = assetProperty as AssetPropertyBoolean;
-                    valueType = typeof(AssetPropertyBoolean);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyDistance)
-                {
-                    AssetPropertyDistance property = assetProperty as AssetPropertyDistance;
-                    valueType = typeof(AssetPropertyDistance);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyDouble)
-                {
-                    AssetPropertyDouble property = assetProperty as AssetPropertyDouble;
-                    valueType = typeof(AssetPropertyDouble);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyDoubleArray2d)
-                {
-                    //Default, it is supported by PropertyGrid to display Double []
-                    //Try to convert DoubleArray to Double []
-                    AssetPropertyDoubleArray2d property = assetProperty as AssetPropertyDoubleArray2d;
-                    valueType = typeof(AssetPropertyDoubleArray2d);
-                    theValue = GetSystemArrayAsString(property.Value);
-                }
-                else if (assetProperty is AssetPropertyDoubleArray3d)
-                {
-                    AssetPropertyDoubleArray3d property = assetProperty as AssetPropertyDoubleArray3d;
-                    valueType = typeof(AssetPropertyDoubleArray3d);
-                    theValue = GetSystemArrayAsString(property.Value);
-                }
-                else if (assetProperty is AssetPropertyDoubleArray4d)
-                {
-                    AssetPropertyDoubleArray4d property = assetProperty as AssetPropertyDoubleArray4d;
-                    valueType = typeof(AssetPropertyDoubleArray4d);
-                    theValue = GetSystemArrayAsString(property.Value);
-                }
-                else if (assetProperty is AssetPropertyDoubleMatrix44)
-                {
-                    AssetPropertyDoubleMatrix44 property = assetProperty as AssetPropertyDoubleMatrix44;
-                    valueType = typeof(AssetPropertyDoubleMatrix44);
-                    theValue = GetSystemArrayAsString(property.Value);
-                }
-                else if (assetProperty is AssetPropertyEnum)
-                {
-                    AssetPropertyEnum property = assetProperty as AssetPropertyEnum;
-                    valueType = typeof(AssetPropertyEnum);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyFloat)
-                {
-                    AssetPropertyFloat property = assetProperty as AssetPropertyFloat;
-                    valueType = typeof(AssetPropertyFloat);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyInteger)
-                {
-                    AssetPropertyInteger property = assetProperty as AssetPropertyInteger;
-                    valueType = typeof(AssetPropertyInteger);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyReference)
-                {
-                    AssetPropertyReference property = assetProperty as AssetPropertyReference;
-                    valueType = typeof(AssetPropertyReference);
-                    theValue = "REFERENCE"; //property.Type;
-                }
-                else if (assetProperty is AssetPropertyString)
-                {
-                    AssetPropertyString property = assetProperty as AssetPropertyString;
-                    valueType = typeof(AssetPropertyString);
-                    theValue = property.Value;
-                }
-                else if (assetProperty is AssetPropertyTime)
-                {
-                    AssetPropertyTime property = assetProperty as AssetPropertyTime;
-                    valueType = typeof(AssetPropertyTime);
-                    theValue = property.Value;
-                }
-                else
-                {
-                    valueType = typeof(String);
-                    theValue = "Unprocessed asset type: " + assetProperty.GetType().Name;
-                }
+        //private static Tuple<Type, Object> GetTypeAndValue(AssetProperty assetProperty, int level)
+        //{
+        //    Object theValue;
+        //    Type valueType;
+        //    //For each AssetProperty, it has different type and value
+        //    //must deal with it separately
+        //    try
+        //    {
+        //        if (assetProperty is AssetPropertyBoolean)
+        //        {
+        //            AssetPropertyBoolean property = assetProperty as AssetPropertyBoolean;
+        //            valueType = typeof(AssetPropertyBoolean);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyDistance)
+        //        {
+        //            AssetPropertyDistance property = assetProperty as AssetPropertyDistance;
+        //            valueType = typeof(AssetPropertyDistance);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyDouble)
+        //        {
+        //            AssetPropertyDouble property = assetProperty as AssetPropertyDouble;
+        //            valueType = typeof(AssetPropertyDouble);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyDoubleArray2d)
+        //        {
+        //            //Default, it is supported by PropertyGrid to display Double []
+        //            //Try to convert DoubleArray to Double []
+        //            AssetPropertyDoubleArray2d property = assetProperty as AssetPropertyDoubleArray2d;
+        //            valueType = typeof(AssetPropertyDoubleArray2d);
+        //            theValue = GetSystemArrayAsString(property.Value);
+        //        }
+        //        else if (assetProperty is AssetPropertyDoubleArray3d)
+        //        {
+        //            AssetPropertyDoubleArray3d property = assetProperty as AssetPropertyDoubleArray3d;
+        //            valueType = typeof(AssetPropertyDoubleArray3d);
+        //            theValue = GetSystemArrayAsString(property.GetValueAsDoubles());
+        //        }
+        //        else if (assetProperty is AssetPropertyDoubleArray4d)
+        //        {
+        //            AssetPropertyDoubleArray4d property = assetProperty as AssetPropertyDoubleArray4d;
+        //            valueType = typeof(AssetPropertyDoubleArray4d);
+        //            theValue = GetSystemArrayAsString(property.Value);
+        //        }
+        //        else if (assetProperty is AssetPropertyDoubleMatrix44)
+        //        {
+        //            AssetPropertyDoubleMatrix44 property = assetProperty as AssetPropertyDoubleMatrix44;
+        //            valueType = typeof(AssetPropertyDoubleMatrix44);
+        //            theValue = GetSystemArrayAsString(property.Value);
+        //        }
+        //        else if (assetProperty is AssetPropertyEnum)
+        //        {
+        //            AssetPropertyEnum property = assetProperty as AssetPropertyEnum;
+        //            valueType = typeof(AssetPropertyEnum);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyFloat)
+        //        {
+        //            AssetPropertyFloat property = assetProperty as AssetPropertyFloat;
+        //            valueType = typeof(AssetPropertyFloat);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyInteger)
+        //        {
+        //            AssetPropertyInteger property = assetProperty as AssetPropertyInteger;
+        //            valueType = typeof(AssetPropertyInteger);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyReference)
+        //        {
+        //            AssetPropertyReference property = assetProperty as AssetPropertyReference;
+        //            valueType = typeof(AssetPropertyReference);
+        //            theValue = "REFERENCE"; //property.Type;
+        //        }
+        //        else if (assetProperty is AssetPropertyString)
+        //        {
+        //            AssetPropertyString property = assetProperty as AssetPropertyString;
+        //            valueType = typeof(AssetPropertyString);
+        //            theValue = property.Value;
+        //        }
+        //        else if (assetProperty is AssetPropertyTime)
+        //        {
+        //            AssetPropertyTime property = assetProperty as AssetPropertyTime;
+        //            valueType = typeof(AssetPropertyTime);
+        //            theValue = property.Value;
+        //        }
+        //        else
+        //        {
+        //            valueType = typeof(String);
+        //            theValue = "Unprocessed asset type: " + assetProperty.GetType().Name;
+        //        }
 
-                if (assetProperty.NumberOfConnectedProperties > 0)
-                {
+        //        if (assetProperty.NumberOfConnectedProperties > 0)
+        //        {
 
-                    String result = "";
-                    result = theValue.ToString();
+        //            String result = "";
+        //            result = theValue.ToString();
 
-                    IList<AssetProperty> properties = assetProperty.GetAllConnectedProperties();
+        //            IList<AssetProperty> properties = assetProperty.GetAllConnectedProperties();
 
-                    foreach (AssetProperty property in properties)
-                    {
-                        if (property is Asset)
-                        {
-                            // Nested?
-                            Asset asset = property as Asset;
-                            int size = asset.Size;
-                            for (int i = 0; i < size; i++)
-                            {
-                                AssetProperty subproperty = asset[i];
-                                Tuple<Type, Object> valueAndType = GetTypeAndValue(subproperty, level + 1);
-                                String indent = "";
-                                if (level > 0)
-                                {
-                                    for (int iLevel = 1; iLevel <= level; iLevel++)
-                                        indent += "   ";
-                                }
-                                result += "\n " + indent + "- connected: name: " + subproperty.Name + " | type: " + valueAndType.Item1.Name +
-                                  " | value: " + valueAndType.Item2.ToString();
-                            }
-                        }
-                    }
+        //            foreach (AssetProperty property in properties)
+        //            {
+        //                if (property is Asset)
+        //                {
+        //                    // Nested?
+        //                    Asset asset = property as Asset;
+        //                    int size = asset.Size;
+        //                    for (int i = 0; i < size; i++)
+        //                    {
+        //                        AssetProperty subproperty = asset[i];
+        //                        Tuple<Type, Object> valueAndType = GetTypeAndValue(subproperty, level + 1);
+        //                        String indent = "";
+        //                        if (level > 0)
+        //                        {
+        //                            for (int iLevel = 1; iLevel <= level; iLevel++)
+        //                                indent += "   ";
+        //                        }
+        //                        result += "\n " + indent + "- connected: name: " + subproperty.Name + " | type: " + valueAndType.Item1.Name +
+        //                          " | value: " + valueAndType.Item2.ToString();
+        //                    }
+        //                }
+        //            }
 
-                    theValue = result;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-            return new Tuple<Type, Object>(valueType, theValue);
-        }
+        //            theValue = result;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //    return new Tuple<Type, Object>(valueType, theValue);
+        //}
 
         /// <summary>
         /// Sets the value of the component to a different value.
@@ -334,6 +340,12 @@ namespace Revit2Gltf
         public override string ToString()
         {
             return base.Name;
+        }
+
+        public override object GetValue(object component)
+        {
+            //throw new NotImplementedException();
+            return null;
         }
     }
 }
