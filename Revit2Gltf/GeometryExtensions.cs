@@ -123,7 +123,7 @@ namespace Revit2Gltf
                         combined.Centroid += cv2.Volume * cv2.Centroid;
                         combined.Volume += cv2.Volume;
                     }
-                    combined.Centroid /= a.Count * combined.Volume;
+                    combined.Centroid /= (a.Count == 0 ? 1 : a.Count) * (combined.Volume == 0 ? 1 : combined.Volume);
                 }
             }
 
