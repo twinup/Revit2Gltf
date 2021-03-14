@@ -91,42 +91,47 @@ namespace Revit2Gltf
             // with its associated volume, which needs to 
             // be factored out again at the end.
 
-            if (0 < a.Count)
+            try
             {
-                combined = new CentroidVolume();
-                bool unweighted = false;
+                if (0 < a.Count)
+                {
+                    combined = new CentroidVolume();
+                    bool unweighted = false;
 
-                // Revit may give us volumes of 0.
-                // In which case we will not do a 
-                // weighted calculation, which will
-                // throw a divide by zero exception.
-                foreach (CentroidVolume cv2 in a)
-                {
-                    if (cv2.Volume == 0)
+                    // Revit may give us volumes of 0.
+                    // In which case we will not do a 
+                    // weighted calculation, which will
+                    // throw a divide by zero exception.
+                    foreach (CentroidVolume cv2 in a)
                     {
-                        unweighted = true;
-                        break;
+                        if (cv2.Volume == 0)
+                        {
+                            unweighted = true;
+                            break;
+                        }
+                    }
+                    if (unweighted)
+                    {
+                        foreach (var cv2 in a)
+                        {
+                            combined.Centroid += cv2.Centroid;
+                        }
+                        combined.Centroid /= a.Count;
+                    }
+                    else
+                    {
+                        foreach (var cv2 in a)
+                        {
+                            combined.Centroid += cv2.Volume * cv2.Centroid;
+                            combined.Volume += cv2.Volume;
+                        }
+                        combined.Centroid /= (a.Count == 0 ? 1 : a.Count) * (combined.Volume == 0 ? 1 : combined.Volume);
                     }
                 }
-                if (unweighted)
-                {
-                    foreach (var cv2 in a)
-                    {
-                        combined.Centroid += cv2.Centroid;
-                    }
-                    combined.Centroid /= a.Count;
-                }
-                else
-                {
-                    foreach (var cv2 in a)
-                    {
-                        combined.Centroid += cv2.Volume * cv2.Centroid;
-                        combined.Volume += cv2.Volume;
-                    }
-                    combined.Centroid /= (a.Count == 0 ? 1 : a.Count) * (combined.Volume == 0 ? 1 : combined.Volume);
-                }
+            } catch(Exception ex)
+            {
+                combined = null;
             }
-
             cvol = combined;
             return combined != null && combined != default(CentroidVolume);
         }
