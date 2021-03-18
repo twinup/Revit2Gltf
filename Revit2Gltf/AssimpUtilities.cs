@@ -33,7 +33,7 @@ namespace Revit2Gltf
 
         public static Color4D ToColor4D(this RevitMaterial mat)
         {
-            var color = mat.Color;
+            var color = mat.Color.IsValid ? mat.Color : new Color(0, 0, 0);
             return new Color4D(color.Red * 1f / 255f, color.Green * 1f / 255f, color.Blue * 1f / 255f, mat.GetOpacity());
         }
 
