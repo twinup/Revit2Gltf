@@ -1,4 +1,4 @@
-﻿#if REVIT2019
+﻿#if REVIT2019 || REVIT2020
 using Autodesk.Revit.DB.Visual;
 #else
 using Autodesk.Revit.Utility;

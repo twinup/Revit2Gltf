@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-#if REVIT2019
+#if REVIT2019 || REVIT2020
 using Autodesk.Revit.DB.Visual;
 #else
 using Autodesk.Revit.Utility;
@@ -123,8 +123,8 @@ namespace Revit2Gltf
                         // .UnifiedbitmapBitmap.  In earlier versions,
                         // you can still reference the string name 
                         // instead: "unifiedbitmap_Bitmap"
-                        AssetPropertyString path = connectedAsset[
-                          UnifiedBitmap.UnifiedbitmapBitmap]
+                        AssetPropertyString path = connectedAsset.FindByName(
+                          UnifiedBitmap.UnifiedbitmapBitmap)
                             as AssetPropertyString;
 #else
                         AssetPropertyString path =
