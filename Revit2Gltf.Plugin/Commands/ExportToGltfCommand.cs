@@ -144,11 +144,11 @@ namespace Revit2Gltf.Plugin.Commands
         {
             // view to export
             viewToExport = null;
-#if !REVIT2020
+//#if !REVIT2020
             viewToExport = docToExport.GetOrCreateDefault3DView();
-#else
-            viewToExport = AddinApplication.UIController.GetCurrentView(docToExport);
-#endif
+//#else
+//            viewToExport = AddinApplication.UIController.GetCurrentView(docToExport);
+//#endif
             if (viewToExport == null)
             {
                 return false;
