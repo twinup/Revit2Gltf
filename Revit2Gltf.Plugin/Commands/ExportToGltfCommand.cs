@@ -19,7 +19,7 @@ namespace Revit2Gltf.Plugin.Commands
     class ExportToGltfCommand : IExternalCommand
     {
         /// <summary>
-        /// 
+        /// Exports a gltf model with separated parameters
         /// </summary>
         /// <param name="commandData"></param>
         /// <param name="message"></param>
@@ -27,6 +27,10 @@ namespace Revit2Gltf.Plugin.Commands
         /// <returns></returns>
         Result IExternalCommand.Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            // Clear previous
+            ElementParameters.Rooms.Clear();
+            ElementParameters.Session_Params.Clear();
+
             if (!TryGetActiveDocument(commandData, out Autodesk.Revit.DB.Document docToExport)) { return Result.Failed; }
             if (!TryGetDefaultView(docToExport, out View viewToExport)) { return Result.Failed; }
 
@@ -60,8 +64,6 @@ namespace Revit2Gltf.Plugin.Commands
                     WithoutBoundaryEdges = true
                 }
              );
-
-
 
             // Check that file was created successfully
             var fbxFileName = configuration.ExportFilePathRoot + "/" + docName + ".fbx";
@@ -119,10 +121,10 @@ namespace Revit2Gltf.Plugin.Commands
             }
 
             // Grab all element data
-            var paramData = docToExport.SiphonElementParamValues(out var legend);
-            var combined = paramData.Values.Combine();
-            JsonConvert.SerializeObject(combined).WriteToFile($"{configuration.ExportFilePathRoot}/Params.json");
-            JsonConvert.SerializeObject(legend).WriteToFile($"{configuration.ExportFilePathRoot}/Legend.json");
+            var paramData = docToExport.SiphonElementParamValues();
+
+            JsonConvert.SerializeObject(paramData).WriteToFile($"{configuration.ExportFilePathRoot}/Params.json");
+            JsonConvert.SerializeObject(ElementParameters.Session_Params).WriteToFile($"{configuration.ExportFilePathRoot}/Legend.json");
 
             // Write out gltf
             AssimpUtilities.SaveToGltf(fbxModel, $"{configuration.ExportFilePathRoot}", docName);

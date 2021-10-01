@@ -185,6 +185,7 @@
     <Compile Include="AssimpUtilities.cs" />
     <Compile Include="CentroidVolume.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ElementParameters.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GeometryExtensions.cs" />

@@ -59,7 +59,8 @@ namespace Revit2Gltf
                 BuiltInCategory.OST_StructuralColumns,
                 BuiltInCategory.OST_StructuralFraming,
                 BuiltInCategory.OST_Views,
-                BuiltInCategory.OST_Truss
+                BuiltInCategory.OST_Truss,
+                BuiltInCategory.OST_Levels,
             }
         };
     }

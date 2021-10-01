@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -86,7 +87,7 @@ namespace Revit2Gltf
             return els;
         }
 
-        static Options DefaultExportGeometryOptions = new Options() 
+        public static Options DefaultExportGeometryOptions = new Options() 
         { 
             DetailLevel = ViewDetailLevel.Medium, 
             IncludeNonVisibleObjects = true 
@@ -96,10 +97,9 @@ namespace Revit2Gltf
         /// Return parameter data for all  
         /// elements of all the given categories
         /// </summary>
-        public static Dictionary<string, Dictionary<string, Dictionary<string,string>>>
+        public static Dictionary<string, ElementParameters>
           SiphonElementParamValues(
             this Document doc,
-            out Dictionary<int, string> legend,
             bool calculateCentroids = true,
             List<BuiltInCategory> cats = null)
         {
@@ -108,61 +108,69 @@ namespace Revit2Gltf
                 cats = ConfigurationManager.ActiveConfiguration.ExportedCategories;
             }
 
-            // Set up the return value dictionary
-            var map_cat_to_uid_to_param_values
-                    = new Dictionary<string,
-                      Dictionary<string,
-                       Dictionary<string, string>>>();
+            var output = new Dictionary<string, ElementParameters>();
 
-            // One top level dictionary per category
-            foreach (BuiltInCategory cat in cats)
-            {
-                map_cat_to_uid_to_param_values.Add(
-                  cat.Description(),
-                  new Dictionary<string,
-                    Dictionary<string, string>>());
-            }
 
             // Collect all required elements
-            var els = doc.ExportableElements();
-
-            // Retrieve parameter data for each element
-            var legendReversed = new Dictionary<string, int>();
-            legendReversed.Add("Category", 0);
-            if (calculateCentroids)
-            {
-                legendReversed.Add("Centroid", 1);
-            }
+            var els = 
+                doc.ExportableElements()
+                .Where(e => e.Category != null);
 
             foreach (Element e in els)
             {
-                Category cat = e.Category;
-                if (null == cat)
+                try
                 {
-                    continue;
+                    BuiltInCategory bic = (BuiltInCategory)
+                      (e.Category.Id.IntegerValue);
+                    ElementParameters eParams = new ElementParameters(e, calculateCentroids);
+                    output.Add(e.UniqueId, eParams);
                 }
-                Dictionary<string,string> param_values = GetParamValues(e, ref legendReversed);
-
-                if (calculateCentroids && 
-                    e.TryGetCentroid(DefaultExportGeometryOptions, out var c))
+                catch(Exception ex)
                 {
-                    param_values.Add("1", c.Centroid_Str);
+                    // Log exception
                 }
-
-                BuiltInCategory bic = (BuiltInCategory)
-                  (e.Category.Id.IntegerValue);
-
-                string catkey = bic.Description();
-                string uniqueId = e.UniqueId.ToString();
-
-                map_cat_to_uid_to_param_values[catkey].Add(
-                  uniqueId, param_values);
             }
 
-            legend = legendReversed.ToDictionary(kv => kv.Value, kv => kv.Key);
 
 
-            return map_cat_to_uid_to_param_values;
+            // Grab rooms
+            RoomFilter filter = new RoomFilter();
+
+            // Apply the filter to the elements in the active document
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+
+            IList<Element> rooms = collector.WherePasses(filter).ToElements();
+            foreach(var r in rooms)
+            {
+                if (output.ContainsKey(r.UniqueId)) { continue; }
+                try
+                {
+                    output.Add(r.UniqueId, new ElementParameters(r, true));
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                }
+            }
+
+            // Grab levels
+            FilteredElementCollector level_coll = new FilteredElementCollector(doc);
+            ICollection<Element> levels = level_coll.OfClass(typeof(Level)).ToElements();
+
+            foreach(var l in levels)
+            {
+                if (output.ContainsKey(l.UniqueId)) { continue; }
+                try
+                {
+                    output.Add(l.UniqueId, new ElementParameters(l, false));
+                }
+                catch (Exception ex)
+                {
+                    // Log exception
+                }
+            }
+
+            return output;
         }
 
         public static string Description(
@@ -173,55 +181,6 @@ namespace Revit2Gltf
             //s = s.Substring(0, s.Length - 1);
             //return s;
             return bic.ToString().ToLower();
-        }
-
-        /// <summary>
-        /// Return all the parameter values  
-        /// deemed relevant for the given element
-        /// in string form.
-        /// </summary>
-        static Dictionary<string,string> GetParamValues(Element e, ref Dictionary<string,int> paramLegend)
-        {
-            // Two choices: 
-            // Element.Parameters property -- Retrieves 
-            // a set containing all  the parameters.
-            // GetOrderedParameters method -- Gets the 
-            // visible parameters in order.
-
-            IList<Parameter> ps = e.GetOrderedParameters();
-
-            List<string> param_values = new List<string>(
-              ps.Count);
-
-
-            var paramList =
-                ps
-                .Where(p => p.HasValue && !String.IsNullOrEmpty(p.AsValueString()));
-            Dictionary<string, string> output = new Dictionary<string, string>();
-            output.Add("0", e.Category.Name);
-
-            foreach (var p in paramList)
-            {
-                var key = GetLegendValue(p,ref paramLegend).ToString();
-                if (!output.ContainsKey(key))
-                {
-                    output.Add(key, p.AsValueString());
-                }
-            }
-            return output;
-
-            int GetLegendValue(Parameter p, ref Dictionary<string,int> lgd)
-            {
-                string n = p.Definition.Name;
-                if (!lgd.ContainsKey(n))
-                {
-                    int c = lgd.Count;
-                    lgd.Add(n, c);
-                    return c;
-                }
-                return lgd[n];                              
-            }
-           
         }
 
         public static View3D GetOrCreateDefault3DView(this Document doc)

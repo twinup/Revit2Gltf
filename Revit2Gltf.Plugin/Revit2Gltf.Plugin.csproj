@@ -215,7 +215,8 @@ if $(Configuration) == Debug2017 goto Debug2017
 if $(Configuration) == Release2017 goto Release2017
 if $(Configuration) == Debug2019 goto Debug2019
 if $(Configuration) == Release2019 goto Release2019
-
+if $(Configuration) == Debug2020 goto Debug2020
+if $(Configuration) == Release2020 goto Release2020
 
 :Debug2016
 echo Copying results to 2016
@@ -263,6 +264,24 @@ echo Copying results to 2019
 xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /y /c /i
 xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\" /i /y /c
 xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2019\" /i /y /c
+goto exit
+
+:exit
+
+:Debug2020
+echo Copying results to 2020
+
+xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /y /c /i
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\" /i /y /c
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /i /y /c
+goto exit
+
+:Release2020
+echo Copying results to 2020
+
+xcopy "$(TargetDir)*" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /y /c /i
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\PackageContents.xml" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\" /i /y /c
+xcopy "$(SolutionDir)Revit2Gltf.Plugin\Revit2Gltf.addin" "C:\ProgramData\Autodesk\ApplicationPlugins\Revit2Gltf.bundle\Contents\x64\R2020\" /i /y /c
 goto exit
 
 :exit</PostBuildEvent>
